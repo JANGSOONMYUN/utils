@@ -8,25 +8,19 @@
 #include <opencv2/core/mat.hpp>
 #include <opencv2/imgproc.hpp>
 
-// Create the class as public in the calibration class of unmanaged c++
-// Load the class in other classes
+
 class LogWriter {
 public:
 	LogWriter() {
-		
-		clock_t t0, t1, t_tmp;
-		t0 = clock();
-		t1 = clock();
-
-
+		// Init current time
 		time_t lt0;
 		lt0 = time(NULL);
 		pTm = localtime(&lt0);
-		
 	}
 
 	LogWriter(std::string path, std::string name, struct tm* pTime) {
 		log_path = path;
+		std::filesystem::create_directories(log_path);
 		log_name = name;
 		pTm = pTime;
 	}
@@ -67,19 +61,10 @@ public:
 		lt0 = time(NULL);
 		pTm = localtime(&lt0);
 
-		//std::cout << pTm->tm_year + 1900 << std::endl;
-		//std::cout << pTm->tm_mon + 1 << std::endl;
-		//std::cout << pTm->tm_mday << std::endl;
-		//std::cout << pTm->tm_hour << std::endl;
-		//std::cout << pTm->tm_min << std::endl;
-		//std::cout << pTm->tm_sec << std::endl;
-
 		std::string log_all;
 		std::string log_date;
 		log_date = "[" + std::to_string(pTm->tm_year + 1900) + "/" + std::to_string(pTm->tm_mon + 1) + "/" + std::to_string(pTm->tm_mday)
 					+ "_" + std::to_string(pTm->tm_hour) + ":" + std::to_string(pTm->tm_min) + ":" + std::to_string(pTm->tm_sec) + "]";
-		//std::cout << log_date << std::endl;
-		//log_status = "[OK]";
 
 		log_all = log_date + " " + log_status + " " + str;
 		std::cout << log_all << std::endl;
@@ -211,11 +196,7 @@ void main() {
 	lw_detection.writeLog("detection");
 
 
-
-	clock_t t0, t1, t_tmp;
-	t0 = clock();
-	t1 = clock();
-
+	// Set current time
 	struct tm* pTm;
 	time_t lt0;
 	lt0 = time(NULL);
@@ -230,8 +211,7 @@ void main() {
 	lw.writeAnyLog("lllllll\n", pTm);
 	lw.writeAnyLog("lllllll\n", pTm);
 
-
-
+	// opencv format Mat test
 	cv::Mat cv_mat = cv_mat.eye(4, 4, CV_16U);
 
 	LogWriter lw_any;
